@@ -1,0 +1,44 @@
+prefix: '&#8f00ff&lESD &#4b4b6a| &r'
+
+messages:
+  need-setkey: '&#ffd94aDu hast noch keinen Schlüssel. Erstelle einen mit &#ffffff/setkey <Schlüssel>'
+  need-key: '&#ffd94aGib deinen Schlüssel mit &#ffffff/key <Schlüssel> &#ffd94aein, um fortzufahren.'
+  key-created: '&#3ad07aDein Schlüssel wurde erstellt. &#7affb0Willkommen!'
+  key-accepted: '&#3ad07aSchlüssel akzeptiert. &#7affb0Willkommen zurück!'
+  session-restored: '&#3ad07aSitzung von deiner Adresse wiederhergestellt. &#7affb0Willkommen zurück!'
+  key-wrong: '&#ff4b6bFalscher Schlüssel. &#ffb3c0Verbleibende Versuche: &#ffffff%attempts%'
+  key-already-exists: '&#ff4b6bDu hast bereits einen Schlüssel. Nutze &#ffffff/key <Schlüssel>&#ff4b6b, um dich anzumelden.'
+  key-not-set: '&#ff4b6bDu hast noch keinen Schlüssel. Nutze zuerst &#ffffff/setkey <Schlüssel>&#ff4b6b.'
+  key-changed: '&#3ad07aDein Schlüssel wurde erfolgreich geändert.'
+  key-too-short: '&#ff4b6bDer Schlüssel ist zu kurz. &#ffb3c0Mindestlänge: &#ffffff%min%'
+  locked-action: '&#ff4b6bGib zuerst deinen Schlüssel ein, um mit dem Server zu interagieren.'
+  not-staff: '&#ff4b6bDu musst keinen Schlüssel verwenden.'
+  no-permission: '&#ff4b6bDu hast keine Berechtigung dafür.'
+  kick-max-attempts: "&#ff4b6b&lESD\n&#ffb3c0Zu viele falsche Schlüsselversuche."
+  reloaded: '&#3ad07aKonfiguration und Sprache neu geladen.'
+  admin-key-set: '&#3ad07aSchlüssel für &#ffffff%player% &#3ad07awurde gesetzt.'
+  admin-skip-set: '&#3ad07aNächste Schlüsselabfrage für &#ffffff%player% &#3ad07awird übersprungen.'
+  admin-sessions-ended: '&#3ad07aAlle Sitzungen von &#ffffff%player% &#3ad07awurden beendet.'
+  admin-key-deleted: '&#3ad07aDer Schlüssel von &#ffffff%player% &#3ad07awurde gelöscht. Er muss einen neuen erstellen.'
+  admin-no-key: '&#ff4b6b%player% &#ff4b6bhat keinen Schlüssel.'
+  player-never-joined: '&#ff4b6bDieser Spieler war noch nie auf diesem Server.'
+  usage-setkey: '&#ff4b6bVerwendung: &#ffffff/setkey <Schlüssel>'
+  usage-key: '&#ff4b6bVerwendung: &#ffffff/key <Schlüssel>'
+  usage-changekey: '&#ff4b6bVerwendung: &#ffffff/changekey <alterSchlüssel> <neuerSchlüssel>'
+  usage-admin: '&#ff4b6bVerwendung: &#ffffff/esd <reload | setkey <Spieler> <Schlüssel> | delkey <Spieler> | skip <Spieler> | end <Spieler>>'
+  help:
+    - '&#8f00ff&lESD &#4b4b6a— Befehle'
+    - '&#c9a7ff/esd reload &#4b4b6a— Konfiguration und Sprache neu laden'
+    - '&#c9a7ff/esd setkey <Spieler> <Schlüssel> &#4b4b6a— Schlüssel eines Spielers setzen'
+    - '&#c9a7ff/esd delkey <Spieler> &#4b4b6a— Schlüssel eines Spielers löschen'
+    - '&#c9a7ff/esd skip <Spieler> &#4b4b6a— nächste Schlüsselabfrage überspringen'
+    - '&#c9a7ff/esd end <Spieler> &#4b4b6a— alle Sitzungen eines Spielers beenden'
+    - '&#c9a7ff/esd help &#4b4b6a— diese Liste anzeigen'
+
+titles:
+  need-setkey:
+    title: '&#8f00ff&lESD'
+    subtitle: '&#c9a7ffSchlüssel erstellen: &#ffffff/setkey <Schlüssel>'
+  need-key:
+    title: '&#8f00ff&lESD'
+    subtitle: '&#c9a7ffSchlüssel eingeben: &#ffffff/key <Schlüssel>'

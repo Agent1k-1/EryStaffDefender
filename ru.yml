@@ -1,0 +1,44 @@
+prefix: '&#8f00ff&lESD &#4b4b6a| &r'
+
+messages:
+  need-setkey: '&#ffd94aУ вас ещё нет ключа. Создайте его командой &#ffffff/setkey <ключ>'
+  need-key: '&#ffd94aВведите свой ключ командой &#ffffff/key <ключ>&#ffd94a, чтобы продолжить.'
+  key-created: '&#3ad07aВаш ключ создан. &#7affb0Добро пожаловать!'
+  key-accepted: '&#3ad07aКлюч принят. &#7affb0С возвращением!'
+  session-restored: '&#3ad07aСессия восстановлена по вашему адресу. &#7affb0С возвращением!'
+  key-wrong: '&#ff4b6bНеверный ключ. &#ffb3c0Осталось попыток: &#ffffff%attempts%'
+  key-already-exists: '&#ff4b6bУ вас уже есть ключ. Используйте &#ffffff/key <ключ>&#ff4b6b, чтобы войти.'
+  key-not-set: '&#ff4b6bУ вас ещё нет ключа. Сначала используйте &#ffffff/setkey <ключ>&#ff4b6b.'
+  key-changed: '&#3ad07aВаш ключ успешно изменён.'
+  key-too-short: '&#ff4b6bКлюч слишком короткий. &#ffb3c0Минимальная длина: &#ffffff%min%'
+  locked-action: '&#ff4b6bСначала введите ключ, чтобы взаимодействовать с сервером.'
+  not-staff: '&#ff4b6bВам не требуется вводить ключ.'
+  no-permission: '&#ff4b6bУ вас нет прав на это действие.'
+  kick-max-attempts: "&#ff4b6b&lESD\n&#ffb3c0Слишком много неверных попыток ввода ключа."
+  reloaded: '&#3ad07aКонфиг и язык перезагружены.'
+  admin-key-set: '&#3ad07aКлюч для &#ffffff%player% &#3ad07aустановлен.'
+  admin-skip-set: '&#3ad07aСледующий запрос ключа для &#ffffff%player% &#3ad07aбудет пропущен.'
+  admin-sessions-ended: '&#3ad07aВсе сессии игрока &#ffffff%player% &#3ad07aзавершены.'
+  admin-key-deleted: '&#3ad07aКлюч игрока &#ffffff%player% &#3ad07aудалён. Ему нужно создать новый.'
+  admin-no-key: '&#ff4b6bУ игрока &#ffffff%player% &#ff4b6bнет ключа.'
+  player-never-joined: '&#ff4b6bЭтот игрок ни разу не заходил на сервер.'
+  usage-setkey: '&#ff4b6bИспользование: &#ffffff/setkey <ключ>'
+  usage-key: '&#ff4b6bИспользование: &#ffffff/key <ключ>'
+  usage-changekey: '&#ff4b6bИспользование: &#ffffff/changekey <старый_ключ> <новый_ключ>'
+  usage-admin: '&#ff4b6bИспользование: &#ffffff/esd <reload | setkey <игрок> <ключ> | delkey <игрок> | skip <игрок> | end <игрок>>'
+  help:
+    - '&#8f00ff&lESD &#4b4b6a— команды'
+    - '&#c9a7ff/esd reload &#4b4b6a— перезагрузить конфиг и язык'
+    - '&#c9a7ff/esd setkey <игрок> <ключ> &#4b4b6a— задать игроку ключ'
+    - '&#c9a7ff/esd delkey <игрок> &#4b4b6a— удалить ключ игрока'
+    - '&#c9a7ff/esd skip <игрок> &#4b4b6a— пропустить следующий запрос ключа'
+    - '&#c9a7ff/esd end <игрок> &#4b4b6a— завершить все сессии игрока'
+    - '&#c9a7ff/esd help &#4b4b6a— показать этот список'
+
+titles:
+  need-setkey:
+    title: '&#8f00ff&lESD'
+    subtitle: '&#c9a7ffСоздайте ключ: &#ffffff/setkey <ключ>'
+  need-key:
+    title: '&#8f00ff&lESD'
+    subtitle: '&#c9a7ffВведите ключ: &#ffffff/key <ключ>'

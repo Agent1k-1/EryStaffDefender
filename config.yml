@@ -1,0 +1,47 @@
+language: en
+
+storage:
+  type: sqlite
+  file: keys.db
+
+security:
+  max-attempts: 3
+  kick-on-max-attempts: true
+  min-key-length: 4
+
+sessions:
+  enabled: false
+  duration-seconds: 3600
+  reset-on-key-change: true
+
+locked:
+  freeze-movement: true
+  allow-head-rotation: true
+  block-chat: true
+  block-commands: true
+  allow-commands:
+    - setkey
+    - sk
+    - key
+    - k
+  block-interact: true
+  block-block-break: true
+  block-block-place: true
+  block-item-drop: true
+  block-item-pickup: true
+  block-inventory: true
+  block-damage: true
+  invulnerable: true
+
+effects:
+  blindness: false
+  slowness: false
+  darkness: false
+  invisibility: false
+  effect-amplifier: 0
+
+titles:
+  enabled: true
+  fade-in: 10
+  stay: 70
+  fade-out: 20

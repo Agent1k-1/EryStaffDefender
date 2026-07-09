@@ -1,0 +1,44 @@
+prefix: '&#8f00ff&lESD &#4b4b6a| &r'
+
+messages:
+  need-setkey: '&#ffd94aVous n''avez pas encore de clé. Créez-en une avec &#ffffff/setkey <clé>'
+  need-key: '&#ffd94aEntrez votre clé avec &#ffffff/key <clé> &#ffd94apour continuer.'
+  key-created: '&#3ad07aVotre clé a été créée. &#7affb0Bienvenue !'
+  key-accepted: '&#3ad07aClé acceptée. &#7affb0Bon retour !'
+  session-restored: '&#3ad07aSession restaurée depuis votre adresse. &#7affb0Bon retour !'
+  key-wrong: '&#ff4b6bClé incorrecte. &#ffb3c0Tentatives restantes : &#ffffff%attempts%'
+  key-already-exists: '&#ff4b6bVous avez déjà une clé. Utilisez &#ffffff/key <clé> &#ff4b6bpour vous connecter.'
+  key-not-set: '&#ff4b6bVous n''avez pas encore de clé. Utilisez d''abord &#ffffff/setkey <clé>&#ff4b6b.'
+  key-changed: '&#3ad07aVotre clé a été changée avec succès.'
+  key-too-short: '&#ff4b6bLa clé est trop courte. &#ffb3c0Longueur minimale : &#ffffff%min%'
+  locked-action: '&#ff4b6bEntrez d''abord votre clé pour interagir avec le serveur.'
+  not-staff: '&#ff4b6bVous n''avez pas besoin d''utiliser une clé.'
+  no-permission: '&#ff4b6bVous n''avez pas la permission de faire cela.'
+  kick-max-attempts: "&#ff4b6b&lESD\n&#ffb3c0Trop de tentatives de clé incorrectes."
+  reloaded: '&#3ad07aConfiguration et langue rechargées.'
+  admin-key-set: '&#3ad07aLa clé de &#ffffff%player% &#3ad07aa été définie.'
+  admin-skip-set: '&#3ad07aLa prochaine demande de clé pour &#ffffff%player% &#3ad07asera ignorée.'
+  admin-sessions-ended: '&#3ad07aToutes les sessions de &#ffffff%player% &#3ad07aont été terminées.'
+  admin-key-deleted: '&#3ad07aLa clé de &#ffffff%player% &#3ad07aa été supprimée. Il doit en créer une nouvelle.'
+  admin-no-key: '&#ff4b6b%player% &#ff4b6bn''a pas de clé.'
+  player-never-joined: '&#ff4b6bCe joueur ne s''est jamais connecté à ce serveur.'
+  usage-setkey: '&#ff4b6bUtilisation : &#ffffff/setkey <clé>'
+  usage-key: '&#ff4b6bUtilisation : &#ffffff/key <clé>'
+  usage-changekey: '&#ff4b6bUtilisation : &#ffffff/changekey <ancienneClé> <nouvelleClé>'
+  usage-admin: '&#ff4b6bUtilisation : &#ffffff/esd <reload | setkey <joueur> <clé> | delkey <joueur> | skip <joueur> | end <joueur>>'
+  help:
+    - '&#8f00ff&lESD &#4b4b6a— commandes'
+    - '&#c9a7ff/esd reload &#4b4b6a— recharger la configuration et la langue'
+    - '&#c9a7ff/esd setkey <joueur> <clé> &#4b4b6a— définir la clé d''un joueur'
+    - '&#c9a7ff/esd delkey <joueur> &#4b4b6a— supprimer la clé d''un joueur'
+    - '&#c9a7ff/esd skip <joueur> &#4b4b6a— ignorer la prochaine demande de clé'
+    - '&#c9a7ff/esd end <joueur> &#4b4b6a— terminer toutes les sessions d''un joueur'
+    - '&#c9a7ff/esd help &#4b4b6a— afficher cette liste'
+
+titles:
+  need-setkey:
+    title: '&#8f00ff&lESD'
+    subtitle: '&#c9a7ffCréez une clé : &#ffffff/setkey <clé>'
+  need-key:
+    title: '&#8f00ff&lESD'
+    subtitle: '&#c9a7ffEntrez votre clé : &#ffffff/key <clé>'

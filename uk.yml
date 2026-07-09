@@ -1,0 +1,44 @@
+prefix: '&#8f00ff&lESD &#4b4b6a| &r'
+
+messages:
+  need-setkey: '&#ffd94aУ вас ще немає ключа. Створіть його командою &#ffffff/setkey <ключ>'
+  need-key: '&#ffd94aВведіть свій ключ командою &#ffffff/key <ключ>&#ffd94a, щоб продовжити.'
+  key-created: '&#3ad07aВаш ключ створено. &#7affb0Ласкаво просимо!'
+  key-accepted: '&#3ad07aКлюч прийнято. &#7affb0З поверненням!'
+  session-restored: '&#3ad07aСесію відновлено за вашою адресою. &#7affb0З поверненням!'
+  key-wrong: '&#ff4b6bНевірний ключ. &#ffb3c0Залишилось спроб: &#ffffff%attempts%'
+  key-already-exists: '&#ff4b6bУ вас вже є ключ. Використайте &#ffffff/key <ключ>&#ff4b6b, щоб увійти.'
+  key-not-set: '&#ff4b6bУ вас ще немає ключа. Спершу використайте &#ffffff/setkey <ключ>&#ff4b6b.'
+  key-changed: '&#3ad07aВаш ключ успішно змінено.'
+  key-too-short: '&#ff4b6bКлюч занадто короткий. &#ffb3c0Мінімальна довжина: &#ffffff%min%'
+  locked-action: '&#ff4b6bСпершу введіть ключ, щоб взаємодіяти із сервером.'
+  not-staff: '&#ff4b6bВам не потрібно вводити ключ.'
+  no-permission: '&#ff4b6bУ вас немає прав на цю дію.'
+  kick-max-attempts: "&#ff4b6b&lESD\n&#ffb3c0Забагато невірних спроб введення ключа."
+  reloaded: '&#3ad07aКонфіг і мову перезавантажено.'
+  admin-key-set: '&#3ad07aКлюч для &#ffffff%player% &#3ad07aвстановлено.'
+  admin-skip-set: '&#3ad07aНаступний запит ключа для &#ffffff%player% &#3ad07aбуде пропущено.'
+  admin-sessions-ended: '&#3ad07aВсі сесії гравця &#ffffff%player% &#3ad07aзавершено.'
+  admin-key-deleted: '&#3ad07aКлюч гравця &#ffffff%player% &#3ad07aвидалено. Йому потрібно створити новий.'
+  admin-no-key: '&#ff4b6bУ гравця &#ffffff%player% &#ff4b6bнемає ключа.'
+  player-never-joined: '&#ff4b6bЦей гравець жодного разу не заходив на сервер.'
+  usage-setkey: '&#ff4b6bВикористання: &#ffffff/setkey <ключ>'
+  usage-key: '&#ff4b6bВикористання: &#ffffff/key <ключ>'
+  usage-changekey: '&#ff4b6bВикористання: &#ffffff/changekey <старий_ключ> <новий_ключ>'
+  usage-admin: '&#ff4b6bВикористання: &#ffffff/esd <reload | setkey <гравець> <ключ> | delkey <гравець> | skip <гравець> | end <гравець>>'
+  help:
+    - '&#8f00ff&lESD &#4b4b6a— команди'
+    - '&#c9a7ff/esd reload &#4b4b6a— перезавантажити конфіг і мову'
+    - '&#c9a7ff/esd setkey <гравець> <ключ> &#4b4b6a— задати гравцю ключ'
+    - '&#c9a7ff/esd delkey <гравець> &#4b4b6a— видалити ключ гравця'
+    - '&#c9a7ff/esd skip <гравець> &#4b4b6a— пропустити наступний запит ключа'
+    - '&#c9a7ff/esd end <гравець> &#4b4b6a— завершити всі сесії гравця'
+    - '&#c9a7ff/esd help &#4b4b6a— показати цей список'
+
+titles:
+  need-setkey:
+    title: '&#8f00ff&lESD'
+    subtitle: '&#c9a7ffСтворіть ключ: &#ffffff/setkey <ключ>'
+  need-key:
+    title: '&#8f00ff&lESD'
+    subtitle: '&#c9a7ffВведіть ключ: &#ffffff/key <ключ>'

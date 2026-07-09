@@ -1,0 +1,44 @@
+prefix: '&#8f00ff&lESD &#4b4b6a| &r'
+
+messages:
+  need-setkey: '&#ffd94aYou have no key yet. Create one with &#ffffff/setkey <key>'
+  need-key: '&#ffd94aEnter your staff key with &#ffffff/key <key> &#ffd94ato continue.'
+  key-created: '&#3ad07aYour key has been created. &#7affb0Welcome!'
+  key-accepted: '&#3ad07aKey accepted. &#7affb0Welcome back!'
+  session-restored: '&#3ad07aSession restored from your address. &#7affb0Welcome back!'
+  key-wrong: '&#ff4b6bWrong key. &#ffb3c0Attempts left: &#ffffff%attempts%'
+  key-already-exists: '&#ff4b6bYou already have a key. Use &#ffffff/key <key> &#ff4b6bto log in.'
+  key-not-set: '&#ff4b6bYou do not have a key yet. Use &#ffffff/setkey <key> &#ff4b6bfirst.'
+  key-changed: '&#3ad07aYour key has been changed successfully.'
+  key-too-short: '&#ff4b6bThe key is too short. &#ffb3c0Minimum length: &#ffffff%min%'
+  locked-action: '&#ff4b6bEnter your key first to interact with the server.'
+  not-staff: '&#ff4b6bYou are not required to use a key.'
+  no-permission: '&#ff4b6bYou do not have permission to do that.'
+  kick-max-attempts: "&#ff4b6b&lESD\n&#ffb3c0Too many wrong key attempts."
+  reloaded: '&#3ad07aConfig and language reloaded.'
+  admin-key-set: '&#3ad07aKey for &#ffffff%player% &#3ad07ahas been set.'
+  admin-skip-set: '&#3ad07aNext key request for &#ffffff%player% &#3ad07awill be skipped.'
+  admin-sessions-ended: '&#3ad07aAll sessions of &#ffffff%player% &#3ad07ahave been ended.'
+  admin-key-deleted: '&#3ad07aThe key of &#ffffff%player% &#3ad07ahas been deleted. They need to create a new one.'
+  admin-no-key: '&#ff4b6b%player% &#ff4b6bdoes not have a key.'
+  player-never-joined: '&#ff4b6bThat player has never joined this server.'
+  usage-setkey: '&#ff4b6bUsage: &#ffffff/setkey <key>'
+  usage-key: '&#ff4b6bUsage: &#ffffff/key <key>'
+  usage-changekey: '&#ff4b6bUsage: &#ffffff/changekey <oldKey> <newKey>'
+  usage-admin: '&#ff4b6bUsage: &#ffffff/esd <reload | setkey <player> <key> | delkey <player> | skip <player> | end <player>>'
+  help:
+    - '&#8f00ff&lESD &#4b4b6a— commands'
+    - '&#c9a7ff/esd reload &#4b4b6a— reload config and language'
+    - '&#c9a7ff/esd setkey <player> <key> &#4b4b6a— set a player''s key'
+    - '&#c9a7ff/esd delkey <player> &#4b4b6a— delete a player''s key'
+    - '&#c9a7ff/esd skip <player> &#4b4b6a— skip the next key request'
+    - '&#c9a7ff/esd end <player> &#4b4b6a— end all sessions of a player'
+    - '&#c9a7ff/esd help &#4b4b6a— show this list'
+
+titles:
+  need-setkey:
+    title: '&#8f00ff&lESD'
+    subtitle: '&#c9a7ffCreate a key: &#ffffff/setkey <key>'
+  need-key:
+    title: '&#8f00ff&lESD'
+    subtitle: '&#c9a7ffEnter your key: &#ffffff/key <key>'

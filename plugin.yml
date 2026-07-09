@@ -1,0 +1,37 @@
+name: EryStaffDefender
+version: '${project.version}'
+main: erydev.eryStaffDefender.EryStaffDefender
+api-version: '1.16'
+load: STARTUP
+authors: [ EryDev, Danchik ]
+folia-supported: true
+
+commands:
+  setkey:
+    usage: /setkey <key>
+    aliases: [ sk ]
+  key:
+    usage: /key <key>
+    aliases: [ k ]
+  changekey:
+    usage: /changekey <oldKey> <newKey>
+    aliases: [ ck ]
+  erystaffdefender:
+    usage: /erystaffdefender <reload|setkey|delkey|skip|end|help>
+    aliases: [ esd, esf ]
+
+permissions:
+  erystaffdefender.staff:
+    default: false
+  erystaffdefender.reload:
+    default: op
+  erystaffdefender.setkey:
+    default: op
+  erystaffdefender.delkey:
+    default: op
+  erystaffdefender.help:
+    default: op
+  erystaffdefender.skip:
+    default: op
+  erystaffdefender.end:
+    default: op
