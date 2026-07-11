@@ -4,10 +4,14 @@ storage:
   type: sqlite
   file: keys.db
 
+staff:
+  include-ops: true
+
 security:
   max-attempts: 3
   kick-on-max-attempts: true
   min-key-length: 4
+  allow-self-setkey: true
 
 sessions:
   enabled: false

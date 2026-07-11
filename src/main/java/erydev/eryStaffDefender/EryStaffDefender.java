@@ -2,6 +2,7 @@ package erydev.eryStaffDefender;
 
 import erydev.eryStaffDefender.commands.AdminCommand;
 import erydev.eryStaffDefender.commands.KeyCommands;
+import erydev.eryStaffDefender.config.PluginSettings;
 import erydev.eryStaffDefender.lang.Messages;
 import erydev.eryStaffDefender.listeners.LockListener;
 import erydev.eryStaffDefender.managers.AuthManager;
@@ -10,29 +11,27 @@ import erydev.eryStaffDefender.utils.SchedulerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
-import static javax.sql.rowset.spi.SyncFactory.getLogger;
-
 public final class EryStaffDefender extends JavaPlugin {
 
+    private static final int METRICS_ID = 32482;
+
+    private volatile PluginSettings settings;
     private KeyDatabase database;
     private AuthManager auth;
     private Messages messages;
 
     @Override
     public void onEnable() {
-           int pluginId = 32482;
-        Metrics metrics = new Metrics(this, pluginId);
-
-        // Optional: Add custom charts
-        metrics.addCustomChart(
-            new Metrics.SimplePie("chart_id", () -> "My value")
-        );
-                printBanner();
+        printBanner();
         saveDefaultConfig();
+        settings = PluginSettings.from(getConfig());
+        new Metrics(this, METRICS_ID);
+
         database = new KeyDatabase(this);
         try {
             database.connect();
@@ -45,24 +44,8 @@ public final class EryStaffDefender extends JavaPlugin {
         auth = new AuthManager(this);
 
         getServer().getPluginManager().registerEvents(new LockListener(this), this);
-
-        KeyCommands keyCommands = new KeyCommands(this);
-        getCommand("setkey").setExecutor(keyCommands);
-        getCommand("key").setExecutor(keyCommands);
-        getCommand("changekey").setExecutor(keyCommands);
-        getCommand("setkey").setTabCompleter(keyCommands);
-        getCommand("key").setTabCompleter(keyCommands);
-        getCommand("changekey").setTabCompleter(keyCommands);
-
-        AdminCommand adminCommand = new AdminCommand(this);
-        getCommand("erystaffdefender").setExecutor(adminCommand);
-        getCommand("erystaffdefender").setTabCompleter(adminCommand);
-
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (player.hasPermission("erystaffdefender.staff") && !database.isSkip(player.getUniqueId())) {
-                auth.lock(player);
-            }
-        }
+        registerCommands();
+        lockOnlineStaff();
 
         getLogger().info("EryStaffDefender enabled" + (SchedulerUtil.isFolia() ? " (Folia mode)." : "."));
     }
@@ -81,16 +64,45 @@ public final class EryStaffDefender extends JavaPlugin {
         }
     }
 
-    public KeyDatabase getDatabase() {
+    public void reloadAll() {
+        reloadConfig();
+        settings = PluginSettings.from(getConfig());
+        messages.load();
+    }
+
+    public @NotNull PluginSettings settings() {
+        return settings;
+    }
+
+    public @NotNull KeyDatabase getDatabase() {
         return database;
     }
 
-    public AuthManager auth() {
+    public @NotNull AuthManager auth() {
         return auth;
     }
 
-    public Messages messages() {
+    public @NotNull Messages messages() {
         return messages;
+    }
+
+    private void registerCommands() {
+        KeyCommands keyCommands = new KeyCommands(this);
+        for (String name : new String[]{"setkey", "key", "changekey"}) {
+            getCommand(name).setExecutor(keyCommands);
+            getCommand(name).setTabCompleter(keyCommands);
+        }
+        AdminCommand adminCommand = new AdminCommand(this);
+        getCommand("erystaffdefender").setExecutor(adminCommand);
+        getCommand("erystaffdefender").setTabCompleter(adminCommand);
+    }
+
+    private void lockOnlineStaff() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (auth.isStaff(player) && !database.isSkip(player.getUniqueId())) {
+                auth.lock(player, database.hasKey(player.getUniqueId()));
+            }
+        }
     }
 
     private void printBanner() {

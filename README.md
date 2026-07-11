@@ -1,2 +1,0 @@
-# EryStaffDefender
-EryStaffDefender plugin

@@ -53,7 +53,7 @@ public final class KeyDatabase {
         }
     }
 
-    public void saveSession(UUID uuid, String ip, long time) {
+    public synchronized void saveSession(UUID uuid, String ip, long time) {
         try (PreparedStatement st = connection.prepareStatement(
                 "INSERT INTO esd_sessions (uuid, ip, last_auth) VALUES (?, ?, ?) " +
                         "ON CONFLICT(uuid, ip) DO UPDATE SET last_auth = excluded.last_auth")) {
@@ -66,7 +66,7 @@ public final class KeyDatabase {
         }
     }
 
-    public long getSessionTime(UUID uuid, String ip) {
+    public synchronized long getSessionTime(UUID uuid, String ip) {
         try (PreparedStatement st = connection.prepareStatement(
                 "SELECT last_auth FROM esd_sessions WHERE uuid = ? AND ip = ?")) {
             st.setString(1, uuid.toString());
@@ -79,7 +79,7 @@ public final class KeyDatabase {
         }
     }
 
-    public void clearSessions(UUID uuid) {
+    public synchronized void clearSessions(UUID uuid) {
         try (PreparedStatement st = connection.prepareStatement("DELETE FROM esd_sessions WHERE uuid = ?")) {
             st.setString(1, uuid.toString());
             st.executeUpdate();
@@ -88,7 +88,7 @@ public final class KeyDatabase {
         }
     }
 
-    public void close() {
+    public synchronized void close() {
         if (connection != null) {
             try {
                 connection.close();
@@ -97,7 +97,7 @@ public final class KeyDatabase {
         }
     }
 
-    public boolean hasKey(UUID uuid) {
+    public synchronized boolean hasKey(UUID uuid) {
         try (PreparedStatement st = connection.prepareStatement("SELECT 1 FROM esd_keys WHERE uuid = ?")) {
             st.setString(1, uuid.toString());
             try (ResultSet rs = st.executeQuery()) {
@@ -109,7 +109,7 @@ public final class KeyDatabase {
         }
     }
 
-    public void setKey(UUID uuid, String name, String key) {
+    public synchronized void setKey(UUID uuid, String name, String key) {
         String salt = newSalt();
         String hash = hash(key, salt);
         try (PreparedStatement st = connection.prepareStatement(
@@ -125,7 +125,7 @@ public final class KeyDatabase {
         }
     }
 
-    public boolean deleteKey(UUID uuid) {
+    public synchronized boolean deleteKey(UUID uuid) {
         try (PreparedStatement st = connection.prepareStatement("DELETE FROM esd_keys WHERE uuid = ?")) {
             st.setString(1, uuid.toString());
             return st.executeUpdate() > 0;
@@ -135,7 +135,7 @@ public final class KeyDatabase {
         }
     }
 
-    public boolean checkKey(UUID uuid, String key) {
+    public synchronized boolean checkKey(UUID uuid, String key) {
         try (PreparedStatement st = connection.prepareStatement("SELECT salt, hash FROM esd_keys WHERE uuid = ?")) {
             st.setString(1, uuid.toString());
             try (ResultSet rs = st.executeQuery()) {
@@ -152,7 +152,7 @@ public final class KeyDatabase {
         }
     }
 
-    public boolean isSkip(UUID uuid) {
+    public synchronized boolean isSkip(UUID uuid) {
         try (PreparedStatement st = connection.prepareStatement("SELECT skip FROM esd_keys WHERE uuid = ?")) {
             st.setString(1, uuid.toString());
             try (ResultSet rs = st.executeQuery()) {
@@ -163,7 +163,7 @@ public final class KeyDatabase {
         }
     }
 
-    public void setSkip(UUID uuid, String name, boolean skip) {
+    public synchronized void setSkip(UUID uuid, String name, boolean skip) {
         try (PreparedStatement st = connection.prepareStatement(
                 "INSERT INTO esd_keys (uuid, name, salt, hash, skip) VALUES (?, ?, '', '', ?) " +
                         "ON CONFLICT(uuid) DO UPDATE SET skip = excluded.skip, name = excluded.name")) {

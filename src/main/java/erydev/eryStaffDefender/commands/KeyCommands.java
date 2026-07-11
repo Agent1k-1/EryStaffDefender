@@ -1,21 +1,24 @@
 package erydev.eryStaffDefender.commands;
 
 import erydev.eryStaffDefender.EryStaffDefender;
+import erydev.eryStaffDefender.config.SecuritySettings;
 import erydev.eryStaffDefender.utils.SchedulerUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 public final class KeyCommands implements CommandExecutor, TabCompleter {
 
     private final EryStaffDefender plugin;
 
-    public KeyCommands(EryStaffDefender plugin) {
+    public KeyCommands(@NotNull EryStaffDefender plugin) {
         this.plugin = plugin;
     }
 
@@ -25,8 +28,7 @@ public final class KeyCommands implements CommandExecutor, TabCompleter {
             return true;
         }
         Player player = (Player) sender;
-        String name = command.getName().toLowerCase();
-        switch (name) {
+        switch (command.getName().toLowerCase(Locale.ROOT)) {
             case "setkey":
                 return handleSetKey(player, args);
             case "key":
@@ -43,9 +45,13 @@ public final class KeyCommands implements CommandExecutor, TabCompleter {
         return Collections.emptyList();
     }
 
-    private boolean handleSetKey(Player player, String[] args) {
-        if (!player.hasPermission("erystaffdefender.staff")) {
+    private boolean handleSetKey(@NotNull Player player, String[] args) {
+        if (!plugin.auth().isStaff(player)) {
             plugin.messages().send(player, "not-staff");
+            return true;
+        }
+        if (!plugin.settings().security().allowSelfSetKey()) {
+            plugin.messages().send(player, "self-setkey-disabled");
             return true;
         }
         if (args.length != 1) {
@@ -56,7 +62,7 @@ public final class KeyCommands implements CommandExecutor, TabCompleter {
             plugin.messages().send(player, "key-already-exists");
             return true;
         }
-        int min = plugin.getConfig().getInt("security.min-key-length");
+        int min = plugin.settings().security().minKeyLength();
         if (args[0].length() < min) {
             plugin.messages().send(player, "key-too-short", "%min%", String.valueOf(min));
             return true;
@@ -68,8 +74,8 @@ public final class KeyCommands implements CommandExecutor, TabCompleter {
         return true;
     }
 
-    private boolean handleKey(Player player, String[] args) {
-        if (!player.hasPermission("erystaffdefender.staff")) {
+    private boolean handleKey(@NotNull Player player, String[] args) {
+        if (!plugin.auth().isStaff(player)) {
             plugin.messages().send(player, "not-staff");
             return true;
         }
@@ -91,19 +97,19 @@ public final class KeyCommands implements CommandExecutor, TabCompleter {
             plugin.messages().send(player, "key-accepted");
             return true;
         }
+        SecuritySettings security = plugin.settings().security();
         int used = plugin.auth().registerFailedAttempt(player.getUniqueId());
         int left = plugin.auth().attemptsLeft(player.getUniqueId());
         plugin.messages().send(player, "key-wrong", "%attempts%", String.valueOf(left));
-        int max = plugin.getConfig().getInt("security.max-attempts");
-        if (used >= max && plugin.getConfig().getBoolean("security.kick-on-max-attempts")) {
+        if (used >= security.maxAttempts() && security.kickOnMaxAttempts()) {
             String reason = plugin.messages().plain("kick-max-attempts");
             SchedulerUtil.runOnEntity(plugin, player, () -> player.kickPlayer(reason));
         }
         return true;
     }
 
-    private boolean handleChangeKey(Player player, String[] args) {
-        if (!player.hasPermission("erystaffdefender.staff")) {
+    private boolean handleChangeKey(@NotNull Player player, String[] args) {
+        if (!plugin.auth().isStaff(player)) {
             plugin.messages().send(player, "not-staff");
             return true;
         }
@@ -119,13 +125,13 @@ public final class KeyCommands implements CommandExecutor, TabCompleter {
             plugin.messages().send(player, "key-wrong", "%attempts%", "-");
             return true;
         }
-        int min = plugin.getConfig().getInt("security.min-key-length");
+        int min = plugin.settings().security().minKeyLength();
         if (args[1].length() < min) {
             plugin.messages().send(player, "key-too-short", "%min%", String.valueOf(min));
             return true;
         }
         plugin.getDatabase().setKey(player.getUniqueId(), player.getName(), args[1]);
-        if (plugin.getConfig().getBoolean("sessions.reset-on-key-change")) {
+        if (plugin.settings().sessions().resetOnKeyChange()) {
             plugin.getDatabase().clearSessions(player.getUniqueId());
         }
         plugin.auth().markAuthenticated(player);

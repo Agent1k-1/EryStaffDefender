@@ -13,6 +13,7 @@ messages:
   key-too-short: '&#ff4b6bThe key is too short. &#ffb3c0Minimum length: &#ffffff%min%'
   locked-action: '&#ff4b6bEnter your key first to interact with the server.'
   not-staff: '&#ff4b6bYou are not required to use a key.'
+  self-setkey-disabled: '&#ff4b6bYou cannot set your own key. Ask an administrator to set it for you.'
   no-permission: '&#ff4b6bYou do not have permission to do that.'
   kick-max-attempts: "&#ff4b6b&lESD\n&#ffb3c0Too many wrong key attempts."
   reloaded: '&#3ad07aConfig and language reloaded.'

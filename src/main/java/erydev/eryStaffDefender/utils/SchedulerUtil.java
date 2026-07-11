@@ -44,6 +44,20 @@ public final class SchedulerUtil {
         }
     }
 
+    public static void runAsync(Plugin plugin, Runnable task) {
+        if (!FOLIA) {
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, task);
+            return;
+        }
+        try {
+            Object asyncScheduler = Bukkit.getServer().getClass().getMethod("getAsyncScheduler").invoke(Bukkit.getServer());
+            Method run = asyncScheduler.getClass().getMethod("runNow", Plugin.class, java.util.function.Consumer.class);
+            run.invoke(asyncScheduler, plugin, (java.util.function.Consumer<Object>) t -> task.run());
+        } catch (Exception e) {
+            task.run();
+        }
+    }
+
     public static void runGlobal(Plugin plugin, Runnable task) {
         if (!FOLIA) {
             Bukkit.getScheduler().runTask(plugin, task);

@@ -1,8 +1,10 @@
 package erydev.eryStaffDefender.listeners;
 
 import erydev.eryStaffDefender.EryStaffDefender;
+import erydev.eryStaffDefender.config.LockedSettings;
 import erydev.eryStaffDefender.managers.AuthManager;
 import erydev.eryStaffDefender.utils.SchedulerUtil;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -11,6 +13,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -22,16 +25,15 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Locale;
 
 public final class LockListener implements Listener {
 
     private final EryStaffDefender plugin;
 
-    public LockListener(EryStaffDefender plugin) {
+    public LockListener(@NotNull EryStaffDefender plugin) {
         this.plugin = plugin;
     }
 
@@ -39,35 +41,42 @@ public final class LockListener implements Listener {
         return plugin.auth();
     }
 
-    private boolean locked(Player player) {
+    private LockedSettings locked() {
+        return plugin.settings().locked();
+    }
+
+    private boolean isLocked(@NotNull Player player) {
         return auth().isLocked(player.getUniqueId());
     }
 
-    private void deny(Player player) {
+    private void deny(@NotNull Player player) {
         plugin.messages().send(player, "locked-action");
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if (!player.hasPermission("erystaffdefender.staff")) {
+        if (!auth().isStaff(player)) {
             return;
         }
+        SchedulerUtil.runAsync(plugin, () -> resolveJoin(player));
+    }
+
+    private void resolveJoin(@NotNull Player player) {
         if (plugin.getDatabase().isSkip(player.getUniqueId())) {
             plugin.getDatabase().setSkip(player.getUniqueId(), player.getName(), false);
             return;
         }
-        if (plugin.getDatabase().hasKey(player.getUniqueId()) && auth().hasValidSession(player)) {
-            SchedulerUtil.runOnEntity(plugin, player, () -> {
-                if (player.isOnline()) {
-                    plugin.messages().send(player, "session-restored");
-                }
-            });
-            return;
-        }
+        boolean hasKey = plugin.getDatabase().hasKey(player.getUniqueId());
+        boolean sessionValid = hasKey && auth().hasValidSession(player);
         SchedulerUtil.runOnEntity(plugin, player, () -> {
-            if (player.isOnline()) {
-                auth().lock(player);
+            if (!player.isOnline()) {
+                return;
+            }
+            if (sessionValid) {
+                plugin.messages().send(player, "session-restored");
+            } else {
+                auth().lock(player, hasKey);
             }
         });
     }
@@ -79,13 +88,7 @@ public final class LockListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onMove(PlayerMoveEvent event) {
-        if (!locked(event.getPlayer())) {
-            return;
-        }
-        if (!plugin.getConfig().getBoolean("locked.freeze-movement")) {
-            return;
-        }
-        if (event.getTo() == null) {
+        if (!isLocked(event.getPlayer()) || !locked().freezeMovement() || event.getTo() == null) {
             return;
         }
         boolean sameBlock = event.getFrom().getBlockX() == event.getTo().getBlockX()
@@ -94,8 +97,8 @@ public final class LockListener implements Listener {
         if (sameBlock) {
             return;
         }
-        if (plugin.getConfig().getBoolean("locked.allow-head-rotation")) {
-            org.bukkit.Location to = event.getFrom().clone();
+        if (locked().allowHeadRotation()) {
+            Location to = event.getFrom().clone();
             to.setYaw(event.getTo().getYaw());
             to.setPitch(event.getTo().getPitch());
             event.setTo(to);
@@ -106,7 +109,7 @@ public final class LockListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onChat(AsyncPlayerChatEvent event) {
-        if (locked(event.getPlayer()) && plugin.getConfig().getBoolean("locked.block-chat")) {
+        if (isLocked(event.getPlayer()) && locked().blockChat()) {
             event.setCancelled(true);
             deny(event.getPlayer());
         }
@@ -115,16 +118,13 @@ public final class LockListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onCommand(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
-        if (!locked(player) || !plugin.getConfig().getBoolean("locked.block-commands")) {
+        if (!isLocked(player) || !locked().blockCommands()) {
             return;
         }
         String raw = event.getMessage().substring(1).trim().toLowerCase(Locale.ROOT);
         String label = raw.split(" ")[0];
-        List<String> allowed = plugin.getConfig().getStringList("locked.allow-commands");
-        for (String entry : allowed) {
-            if (label.equals(entry.toLowerCase(Locale.ROOT))) {
-                return;
-            }
+        if (locked().commandAllowed(label)) {
+            return;
         }
         event.setCancelled(true);
         deny(player);
@@ -132,21 +132,21 @@ public final class LockListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onInteract(PlayerInteractEvent event) {
-        if (locked(event.getPlayer()) && plugin.getConfig().getBoolean("locked.block-interact")) {
+        if (isLocked(event.getPlayer()) && locked().blockInteract()) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onInteractEntity(PlayerInteractEntityEvent event) {
-        if (locked(event.getPlayer()) && plugin.getConfig().getBoolean("locked.block-interact")) {
+        if (isLocked(event.getPlayer()) && locked().blockInteract()) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBreak(BlockBreakEvent event) {
-        if (locked(event.getPlayer()) && plugin.getConfig().getBoolean("locked.block-block-break")) {
+        if (isLocked(event.getPlayer()) && locked().blockBlockBreak()) {
             event.setCancelled(true);
             deny(event.getPlayer());
         }
@@ -154,7 +154,7 @@ public final class LockListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlace(BlockPlaceEvent event) {
-        if (locked(event.getPlayer()) && plugin.getConfig().getBoolean("locked.block-block-place")) {
+        if (isLocked(event.getPlayer()) && locked().blockBlockPlace()) {
             event.setCancelled(true);
             deny(event.getPlayer());
         }
@@ -162,7 +162,7 @@ public final class LockListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onDrop(PlayerDropItemEvent event) {
-        if (locked(event.getPlayer()) && plugin.getConfig().getBoolean("locked.block-item-drop")) {
+        if (isLocked(event.getPlayer()) && locked().blockItemDrop()) {
             event.setCancelled(true);
         }
     }
@@ -173,7 +173,7 @@ public final class LockListener implements Listener {
             return;
         }
         Player player = (Player) event.getEntity();
-        if (locked(player) && plugin.getConfig().getBoolean("locked.block-item-pickup")) {
+        if (isLocked(player) && locked().blockItemPickup()) {
             event.setCancelled(true);
         }
     }
@@ -184,7 +184,7 @@ public final class LockListener implements Listener {
             return;
         }
         Player player = (Player) event.getPlayer();
-        if (locked(player) && plugin.getConfig().getBoolean("locked.block-inventory")) {
+        if (isLocked(player) && locked().blockInventory()) {
             event.setCancelled(true);
         }
     }
@@ -195,7 +195,7 @@ public final class LockListener implements Listener {
             return;
         }
         Player player = (Player) event.getWhoClicked();
-        if (locked(player) && plugin.getConfig().getBoolean("locked.block-inventory")) {
+        if (isLocked(player) && locked().blockInventory()) {
             event.setCancelled(true);
         }
     }
@@ -206,29 +206,31 @@ public final class LockListener implements Listener {
             return;
         }
         Player player = (Player) event.getEntity();
-        if (locked(player) && plugin.getConfig().getBoolean("locked.block-damage")) {
+        if (isLocked(player) && locked().blockDamage()) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onDamageOthers(EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof Player) {
-            Player player = (Player) event.getDamager();
-            if (locked(player) && plugin.getConfig().getBoolean("locked.block-damage")) {
-                event.setCancelled(true);
-                deny(player);
-            }
+        if (!(event.getDamager() instanceof Player)) {
+            return;
+        }
+        Player player = (Player) event.getDamager();
+        if (isLocked(player) && locked().blockDamage()) {
+            event.setCancelled(true);
+            deny(player);
         }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onTarget(EntityTargetLivingEntityEvent event) {
-        if (event.getTarget() instanceof Player) {
-            Player player = (Player) event.getTarget();
-            if (locked(player) && plugin.getConfig().getBoolean("locked.invulnerable")) {
-                event.setCancelled(true);
-            }
+        if (!(event.getTarget() instanceof Player)) {
+            return;
+        }
+        Player player = (Player) event.getTarget();
+        if (isLocked(player) && locked().invulnerable()) {
+            event.setCancelled(true);
         }
     }
 }
